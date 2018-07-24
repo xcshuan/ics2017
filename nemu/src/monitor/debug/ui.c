@@ -78,10 +78,6 @@ static int cmd_p(char *args){
 }
 
 static int cmd_x(char *args){
-	return 0;
-}
-
-static int cmd_w(char *args){
 	char *arg = strtok(NULL, " ");
     int n;
 	int addr;
@@ -103,6 +99,10 @@ static int cmd_w(char *args){
 		printf("0x%08x",paddr_read(addr + 4 * i, 4));
 		printf("\n");
 	}
+	return 0;
+}
+
+static int cmd_w(char *args){
 	return 0;
 }
 
