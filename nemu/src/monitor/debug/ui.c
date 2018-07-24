@@ -43,7 +43,7 @@ static int cmd_si(char *args){
 	int n;
 	if(arg!=NULL){
 		if(sscanf(arg,"%d", &n) != 1) {
-			printf("Input Error!Please input si with a integer.");
+			printf("Input Error!Please input si with a integer.\n");
 			return 0;
 		}
 	}
