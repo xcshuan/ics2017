@@ -83,24 +83,24 @@ static int cmd_x(char *args){
 	uint32_t addr;
 	if(arg != NULL){
 		if(sscanf(arg,"%d", &n) != 1){
-			printf("Input Error!");
+			printf("Input Error!\n");
 			return 0;
 		}
 	}
 	else{
-		printf("Input Error!");
+		printf("Input Error!\n");
 		return 0;
 	}
 	
 	arg= strtok(NULL, " ");
 	if(arg != NULL){
 		if(sscanf(arg,"0x%x", &addr) != 1){
-			printf("Input Error!");
+			printf("Input Error!\n");
 			return 0;
 		}
 	}
 	else{
-		printf("Input Error!");
+		printf("Input Error!\n");
 		return 0;
 	}
 
