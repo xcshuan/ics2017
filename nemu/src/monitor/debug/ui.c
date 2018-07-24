@@ -87,12 +87,21 @@ static int cmd_x(char *args){
 			return 0;
 		}
 	}
+	else{
+		printf("Input Error!");
+		return 0;
+	}
 	
-	arg = strtok(NULL, " ");
+	arg= strtok(NULL, " ");
 	if(arg != NULL){
 		if(sscanf(arg,"0x%x", &addr) != 1){
 			printf("Input Error!");
+			return 0;
 		}
+	}
+	else{
+		printf("Input Error!");
+		return 0;
 	}
 
 	for(int i = 0; i < n ;i ++){
