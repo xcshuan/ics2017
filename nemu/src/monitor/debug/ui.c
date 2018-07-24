@@ -41,7 +41,7 @@ static int cmd_help(char *args);
 static int cmd_si(char *args){
 	char *arg = strtok(NULL, " ");
 	int n;
-	if(arg!=NULL){
+	if(arg != NULL){
 		if(sscanf(arg,"%d", &n) != 1) {
 			printf("Input Error!Please input si with a integer.\n");
 			return 0;
@@ -68,7 +68,7 @@ static int cmd_info(char *args){
 
 	}
 	else{
-		printf("Input Error ! Please input \"info\" with \"r\" or \"w\"");
+		printf("Input Error ! Please input \"info\" with \"r\" or \"w\"\n");
 	}
 	return 0;
 }
@@ -82,7 +82,27 @@ static int cmd_x(char *args){
 }
 
 static int cmd_w(char *args){
-	
+	char *arg = strtok(NULL, " ");
+    int n;
+	int addr;
+	if(arg != NULL){
+		if(sscanf(arg,"%d", &n) != 1){
+			printf("Input Error!");
+			return 0;
+		}
+	}
+
+	arg = strtok(NULL, " ");
+	if(arg != NULL){
+		if(sscanf(arg,"0x%x", &addr) != 1){
+			printf("Input Error!");
+		}
+	}
+
+	for(int i = 0; i < n ;i ++){
+		paddr_read(addr + 4 * i,4);
+		printf("\n");
+	}
 	return 0;
 }
 
