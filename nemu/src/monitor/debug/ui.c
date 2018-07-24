@@ -38,6 +38,47 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args){
+	char *arg = strtok(NULL, " ");
+	int n;
+	assert(sscanf(arg,"%d", &n));
+	cpu_exec(n);
+	return 0;
+}
+
+static int cmd_info(char *args){
+	char *arg = strtok(NULL, " ");
+	if(strcmp("r",arg) == 0)
+	{
+		char *reg[] = {"EAX", "ECX", "EDX", "EBX", "ESP", "EBP", "ESI", "EDI"};
+		for(int i = R_EAX; i < R_EDI;i++){
+			printf("%s : %x", reg[i], cpu.gpr[i]._32);
+			if(i < R_EDI - 1) printf("/n"); 
+		}
+	}	
+	else if(strcmp("w", arg) == 0)
+	{
+
+	}
+	return 0;
+}
+
+static int cmd_p(char *args){
+	return 0;
+}
+
+static int cmd_x(char *args){
+	return 0;
+}
+
+static int cmd_w(char *args){
+	return 0;
+}
+
+static int cmd_d(char *args){
+	return 0;
+}
+
 static struct {
   char *name;
   char *description;
@@ -46,9 +87,13 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "si", "Execute instructions step over [N]", cmd_si },
+  { "info", "Print the status of program", cmd_info },
+  { "p", "Evaluate expression", cmd_p },
+  { "x", "Scan the ram", cmd_x},
+  { "w","Setting watchpoint", cmd_w},
+  { "d","Delete the watchpoint which seril number is [N]", cmd_d},
   /* TODO: Add more commands */
-
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
