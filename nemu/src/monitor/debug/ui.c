@@ -80,14 +80,14 @@ static int cmd_p(char *args){
 static int cmd_x(char *args){
 	char *arg = strtok(NULL, " ");
     int n;
-	int addr;
+	uint32_t addr;
 	if(arg != NULL){
 		if(sscanf(arg,"%d", &n) != 1){
 			printf("Input Error!");
 			return 0;
 		}
 	}
-
+	
 	arg = strtok(NULL, " ");
 	if(arg != NULL){
 		if(sscanf(arg,"0x%x", &addr) != 1){
