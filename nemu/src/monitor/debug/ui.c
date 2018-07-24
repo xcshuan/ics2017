@@ -60,12 +60,15 @@ static int cmd_info(char *args){
 	{
 		char *reg[] = {"EAX", "ECX", "EDX", "EBX", "ESP", "EBP", "ESI", "EDI"};
 		for(int i = R_EAX; i <= R_EDI;i++){
-			printf("%s :0x%08x\n", reg[i], cpu.gpr[i]._32);
+			printf("%s : 0x%08x\n", reg[i], cpu.gpr[i]._32);
 		}
 	}	
 	else if(strcmp("w", arg) == 0)
 	{
 
+	}
+	else{
+		printf("Input Error ! Please input \"info\" with \"r\" or \"w\"");
 	}
 	return 0;
 }
