@@ -100,7 +100,7 @@ static int cmd_w(char *args){
 	}
 
 	for(int i = 0; i < n ;i ++){
-		paddr_read(addr + 4 * i,4);
+		printf("0x%08x",paddr_read(addr + 4 * i, 4));
 		printf("\n");
 	}
 	return 0;
