@@ -42,7 +42,10 @@ static int cmd_si(char *args){
 	char *arg = strtok(NULL, " ");
 	int n;
 	if(arg!=NULL){
-		assert(sscanf(arg,"%d", &n));
+		if(sscanf(arg,"%d", &n) != 1) {
+			printf("Input Error!Please input si with a integer.");
+			return 0;
+		}
 	}
 	else{
 		n = 1;
