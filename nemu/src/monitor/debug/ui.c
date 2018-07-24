@@ -41,7 +41,12 @@ static int cmd_help(char *args);
 static int cmd_si(char *args){
 	char *arg = strtok(NULL, " ");
 	int n;
-	assert(sscanf(arg,"%d", &n));
+	if(arg!=NULL){
+		assert(sscanf(arg,"%d", &n));
+	}
+	else{
+		n = 1;
+	}
 	cpu_exec(n);
 	return 0;
 }
