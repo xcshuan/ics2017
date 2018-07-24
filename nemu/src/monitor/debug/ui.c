@@ -52,8 +52,7 @@ static int cmd_info(char *args){
 	{
 		char *reg[] = {"EAX", "ECX", "EDX", "EBX", "ESP", "EBP", "ESI", "EDI"};
 		for(int i = R_EAX; i < R_EDI;i++){
-			printf("%s : %x", reg[i], cpu.gpr[i]._32);
-			if(i < R_EDI - 1) printf("/n"); 
+			printf("%s : %x\n", reg[i], cpu.gpr[i]._32);
 		}
 	}	
 	else if(strcmp("w", arg) == 0)
