@@ -81,8 +81,9 @@ static int cmd_x(char *args){
 	char *arg = strtok(NULL, " ");
     int n;
 	uint32_t addr;
+	bool success;
 	if(arg != NULL){
-		if(sscanf(arg,"%d", &n) != 1){
+		if(sscanf(arg,"%d", &n) != 1){		//首先保证n是整数
 			printf("Input Error!\n");
 			return 0;
 		}
@@ -92,8 +93,8 @@ static int cmd_x(char *args){
 		return 0;
 	}
 	
-	arg= strtok(NULL, " ");
-	if(arg != NULL){
+	arg = strtok(NULL, " ");
+	/*if(arg != NULL){
 		if(sscanf(arg,"0x%x", &addr) != 1){
 			printf("Input Error!\n");
 			return 0;
@@ -102,8 +103,9 @@ static int cmd_x(char *args){
 	else{
 		printf("Input Error!\n");
 		return 0;
-	}
+	}*/
 
+	addr = expr(arg,&success);
 	for(int i = 0; i < n ;i ++){
 		printf("0x%07x : 0x%08x",addr + 4 * i,paddr_read(addr + 4 * i, 4));
 		printf("\n");

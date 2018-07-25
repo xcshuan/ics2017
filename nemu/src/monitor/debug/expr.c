@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ
+  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_MINU, TK_MULT, TK_DIVI, TK_DEC, TK_LEB, TK_RIB
 
   /* TODO: Add more token types */
 
@@ -23,8 +23,14 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"==", TK_EQ}         // equal
+  {"\\(", TK_LEB},     //Left brace
+  {"\\)", TK_RIB},		//Right brace
+  {"\\+", TK_PLUS},    // plus
+  {"-", TK_MINU},		//Minus
+  {"==", TK_EQ},         // equal
+  {"\\*", TK_MULT},				//multiplication sign
+  {"/", TK_DIVI},				//division sign
+  {"[0-9]+",TK_DEC}      //digital 
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -43,11 +49,9 @@ void init_regex() {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
-      panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
-    }
-  }
 }
-
+}
+}
 typedef struct token {
   int type;
   char str[32];
@@ -78,11 +82,24 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
-        switch (rules[i].token_type) {
-          default: TODO();
+		
+		
+		if(rules[i].token_type == TK_NOTYPE) break;	
+		
+		tokens[nr_token].type = rules[i].token_type;
+        
+		switch (rules[i].token_type) {
+			case TK_EQ:
+			case TK_PLUS: 
+			case TK_MINU: 
+			case TK_MULT: 
+			case TK_DIVI: 
+			case TK_LEB: 
+			case TK_RIB:break;
+			case TK_DEC:tokens[nr_token].str[0] = '\0';
+						strncat(tokens[nr_token].str, substr_start,(substr_len < 32? substr_len:32));
         }
-
+		nr_token++;
         break;
       }
     }
@@ -96,6 +113,86 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(uint32_t p, uint32_t q){
+	uint32_t flag = 0;
+	for(int i = p; i < q;i++){
+		if(tokens[i].type == TK_LEB){
+			flag++;
+		}
+		else if(tokens[i].type == TK_RIB){
+			flag--;
+		}
+		if(flag == 0 && i != p && i != q) return false;
+	}
+	if(flag != 0) return false;
+	return true;
+}
+
+uint32_t priority(uint32_t type){			//return the priority of token
+	if(type == TK_LEB || type == TK_RIB)
+		return 1;
+	else if(type == TK_MULT || type == TK_DIVI)
+		return 3;
+	else if(type == TK_PLUS || type == TK_MINU)
+		return 4;
+	else return 0;
+
+}
+
+uint32_t find_op(uint32_t p, uint32_t q){  //find dominate oprator
+	uint32_t x = p;
+	for(int i = p;i <= q;i++){
+		if(tokens[i].type == TK_LEB){
+			while(1){
+				i++;
+				if(tokens[i].type == TK_RIB) break;
+		}
+		}
+		if((priority(tokens[i].type) >= priority(tokens[x].type)) && i > x){
+			x = i;
+		}
+	}
+
+	return x;
+}
+
+uint32_t eval(uint32_t p,uint32_t q){		//evaluate
+	if(p > q){
+		/*Bad expression*/
+		assert(0);
+	}
+	else if (p == q){
+		/*Single token.
+		 * For  now this token should be a number.
+		 * return the value of the number*/
+		uint32_t n;
+		assert(sscanf(tokens[p].str,"%d",&n));
+		return n;			
+	}
+	else if(check_parentheses(p,q) == true){
+		/*The expression is surrounded by a matched pair of parentheses.
+		 * If that is the case, just throw away the parentheses.
+		 */
+		return eval(p + 1, q - 1);
+	}
+	else{
+		uint32_t op = find_op(p, q);
+		uint32_t val1 = eval(p, op - 1);
+		uint32_t val2 = eval(op + 1, q);
+
+		switch(tokens[op].type){
+			case TK_PLUS: return val1 + val2;
+			case TK_MINU: return val1 - val2;
+			case TK_MULT: return val1 * val2;
+			case TK_DIVI: return val1 / val2;
+			default:assert(0);
+		}
+		/*Todo*/
+	}
+
+}
+
+
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -103,7 +200,6 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
-  return 0;
+ *success = true; 
+  return eval(0, nr_token-1);
 }
