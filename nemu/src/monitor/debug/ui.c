@@ -75,9 +75,9 @@ static int cmd_info(char *args){
 
 static int cmd_p(char *args){
 	char *arg = strtok(NULL, " ");
-	bool *success = false;
-	uint32_t value = expr(arg,success);
-	if(*success == false) {
+	bool success = false;
+	uint32_t value = expr(arg,&success);
+	if(success == false) {
 		printf("Input Error!");
 		cmd_c(arg);
 	}
@@ -90,7 +90,7 @@ static int cmd_x(char *args){
 	char *arg = strtok(NULL, " ");
     int n;
 	uint32_t addr;
-	bool *success = false;
+	bool success = false;
 	if(arg != NULL){
 		if(sscanf(arg,"%d", &n) != 1){		//首先保证n是整数
 			printf("Input Error!\n");
@@ -114,8 +114,8 @@ static int cmd_x(char *args){
 		return 0;
 	}*/
 
-	addr = expr(arg,success);
-	if(*success == false) {
+	addr = expr(arg,&success);
+	if(success == false) {
 		printf("Input Error!");
 		cmd_c(arg);
 	}
