@@ -34,7 +34,7 @@ static struct rule {
   {"\\|\\|", TK_LOR},
   {"^0[xX][0-9a-fA-F]+", TK_HEX},
   {"[0-9]+", TK_DEC},      //digital 
-  {"\\$e[a-za-z]",TK_REG},	//reg
+  {"\\$e[a-z]+",TK_REG},	//reg
   {"!", TK_NE}
 };
 
