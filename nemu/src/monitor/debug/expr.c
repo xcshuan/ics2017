@@ -59,6 +59,31 @@ typedef struct token {
 
 Token tokens[32];
 int nr_token;
+bool check_parentheses(uint32_t p, uint32_t q, bool *success ){
+	uint32_t flag = 0;
+	uint32_t n = 0;
+	if(tokens[p].type != TK_LEB) n++;
+	for(int i = p; i <= q; i++){
+		if(tokens[i].type == TK_LEB){
+			flag++;
+		}
+		else if(tokens[i].type == TK_RIB){
+			flag--;
+		}
+		if(flag == 0 && i != p && i != q) n++;
+		if(flag < 0) {
+			*success = false;
+			n++;
+		}
+	}
+	if(flag != 0) {
+		*success = false;
+		n++;
+	}
+
+	if(n > 0) return false;
+	return true;
+}
 
 static bool make_token(char *e) {
   int position = 0;
@@ -109,27 +134,16 @@ static bool make_token(char *e) {
       return false;
     }
   }
+  bool success;
+  check_parentheses(0, nr_token - 1, &success);
+  if(success == false){
+	  return false;
+  }
 
   return true;
 }
 
-bool check_parentheses(uint32_t p, uint32_t q){
-	uint32_t flag = 0;
-	if(tokens[p].type != TK_LEB) return false;
-	for(int i = p; i <= q; i++){
-		if(tokens[i].type == TK_LEB){
-			flag++;
-		}
-		else if(tokens[i].type == TK_RIB){
-			flag--;
-		}
-		if(flag == 0 && i != p && i != q) return false;
-		if(flag < 0) return false;
-	}
-	if(flag != 0) return false;
 
-	return true;
-}
 
 uint32_t priority(uint32_t type){			//return the priority of token
 	if(type == TK_LEB || type == TK_RIB)
@@ -159,7 +173,8 @@ uint32_t find_op(uint32_t p, uint32_t q){  //find dominate oprator
 	return x;
 }
 
-uint32_t eval(uint32_t p,uint32_t q){		//evaluate
+uint32_t eval(uint32_t p,uint32_t q){	//evaluate
+	bool success;
 	if(p > q){
 		/*Bad expression*/
 		return -1;
@@ -172,7 +187,7 @@ uint32_t eval(uint32_t p,uint32_t q){		//evaluate
 		assert(sscanf(tokens[p].str,"%d",&n));
 		return n;			
 	}
-	else if(check_parentheses(p,q) == true){
+	else if(check_parentheses(p,q,&success) == true){
 		/*The expression is surrounded by a matched pair of parentheses.
 		 * If that is the case, just throw away the parentheses.
 		 */
@@ -203,13 +218,13 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  uint32_t a = (eval(0, nr_token-1));
-  if(a == -1){
-  *success = false;
-  return 0;
-  }
-  else{
-  *success = true;
-  return a;
-  }
+ uint32_t a = (eval(0, nr_token-1));
+ if(a == -1){
+	 *success = false;
+	 return 0;
+ }
+ else{
+	 *success = true;
+	 return a;
+ }
 }
