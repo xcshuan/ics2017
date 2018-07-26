@@ -116,7 +116,7 @@ static bool make_token(char *e) {
 bool check_parentheses(uint32_t p, uint32_t q){
 	uint32_t flag = 0;
 	if(tokens[p].type != TK_LEB) return false;
-	for(int i = p; i < q;i++){
+	for(int i = p; i <= q; i++){
 		if(tokens[i].type == TK_LEB){
 			flag++;
 		}

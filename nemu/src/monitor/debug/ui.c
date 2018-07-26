@@ -57,7 +57,7 @@ static int cmd_si(char *args){
 static int cmd_info(char *args){
 	char *arg = strtok(NULL, " ");
 	if(arg == NULL) {
-		printf("Input Error!");
+		printf("Input Error!/n");
 		return 0;
 	}
 	if(strcmp("r",arg) == 0)
