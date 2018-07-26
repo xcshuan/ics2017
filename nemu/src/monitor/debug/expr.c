@@ -161,6 +161,7 @@ static bool make_token(char *e) {
 	  return false;
   }
   check_sign(0, nr_token - 1);
+  printf("%d\n",tokens[0].type);
   return true;
 }
 
