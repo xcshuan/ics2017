@@ -268,7 +268,7 @@ uint32_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
  uint32_t a = (eval(0, nr_token-1));
  if(a == -1){
-	 *success = false;
+	// *success = false;
 	 return 0;
  }
  else{
