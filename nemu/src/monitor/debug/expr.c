@@ -204,6 +204,7 @@ uint32_t eval(uint32_t p,uint32_t q){	//evaluate
 	bool success;
 	if(p > q){
 		/*Bad expression*/
+		printf("Testing1\n");
 		return -1;
 	}
 	else if (p == q){
@@ -211,6 +212,7 @@ uint32_t eval(uint32_t p,uint32_t q){	//evaluate
 		 * For  now this token should be a number.
 		 * return the value of the number*/
 		uint32_t n;
+		printf("Testing2\n");
 		if(tokens[p].type == TK_DEC){
 			assert(sscanf(tokens[p].str,"%d",&n));
 			return n;
@@ -242,7 +244,7 @@ uint32_t eval(uint32_t p,uint32_t q){	//evaluate
 		uint32_t op = find_op(p, q);
 		uint32_t val1 = eval(p, op - 1);
 		uint32_t val2 = eval(op + 1, q);
-		printf("Testing\n");
+		printf("Testing3\n");
 		switch(tokens[op].type){
 			case TK_PLUS: return val1 + val2;
 			case TK_MINU: return val1 - val2;
