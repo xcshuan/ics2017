@@ -81,7 +81,7 @@ static int cmd_p(char *args){
 	bool success = false;
 	uint32_t value = expr(args,&success);
 	if(success == false) {
-		printf("Input Error!");
+		printf("Input Error\n!");
 		cmd_c(args);
 	}
 	else printf("%d\n",value);
@@ -119,7 +119,7 @@ static int cmd_x(char *args){
 
 	addr = expr(arg,&success);
 	if(success == false) {
-		printf("Input Error!");
+		printf("Input Error!\n");
 		cmd_c(arg);
 	}
 	for(int i = 0; i < n ;i ++){
