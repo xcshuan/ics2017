@@ -115,6 +115,7 @@ static bool make_token(char *e) {
 
 bool check_parentheses(uint32_t p, uint32_t q){
 	uint32_t flag = 0;
+	if(tokens[p].type != TK_LEB) return false;
 	for(int i = p; i < q;i++){
 		if(tokens[i].type == TK_LEB){
 			flag++;
@@ -123,8 +124,10 @@ bool check_parentheses(uint32_t p, uint32_t q){
 			flag--;
 		}
 		if(flag == 0 && i != p && i != q) return false;
+		if(flag < 0) return false;
 	}
 	if(flag != 0) return false;
+
 	return true;
 }
 
@@ -146,7 +149,7 @@ uint32_t find_op(uint32_t p, uint32_t q){  //find dominate oprator
 			while(1){
 				i++;
 				if(tokens[i].type == TK_RIB) break;
-		}
+			}
 		}
 		if((priority(tokens[i].type) >= priority(tokens[x].type)) && i > x){
 			x = i;
@@ -159,7 +162,7 @@ uint32_t find_op(uint32_t p, uint32_t q){  //find dominate oprator
 uint32_t eval(uint32_t p,uint32_t q){		//evaluate
 	if(p > q){
 		/*Bad expression*/
-		assert(0);
+		return -1;
 	}
 	else if (p == q){
 		/*Single token.
@@ -200,6 +203,13 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
- *success = true; 
-  return eval(0, nr_token-1);
+  uint32_t a = (eval(0, nr_token-1));
+  if(a == -1){
+  *success = false;
+  return 0;
+  }
+  else{
+  *success = true;
+  return a;
+  }
 }
