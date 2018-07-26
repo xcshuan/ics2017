@@ -97,6 +97,7 @@ bool check_parentheses(uint32_t p, uint32_t q, bool *success ){
 	}
 
 	if(n > 0) return false;
+	printf("sjsjsj");
 	return true;
 }
 
