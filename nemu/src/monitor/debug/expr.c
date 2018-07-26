@@ -34,7 +34,7 @@ static struct rule {
   {"\\|\\|", TK_LOR},
   {"^0[xX][0-9a-fA-F]+", TK_HEX},
   {"[0-9]+", TK_DEC},      //digital 
-  {"\\$e[ax|cx|dx|bx|sp|bp|si|di]",TK_REG},	//reg
+  {"\\$e[a-za-z]",TK_REG},	//reg
   {"!", TK_NE}
 };
 
@@ -227,6 +227,7 @@ uint32_t eval(uint32_t p,uint32_t q){	//evaluate
 	    else if (strcmp(tokens[p].str, "$esi") == 0)  return cpu.esi;
 	    else if (strcmp(tokens[p].str, "$edi") == 0)  return cpu.edi;
 	    else if (strcmp(tokens[p].str, "$eip") == 0)  return cpu.eip;
+		else printf("REG Intput Error!");
 		}
 	}
 	else if(check_parentheses(p,q,&success) == true){
