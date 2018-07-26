@@ -7,9 +7,8 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_MINU, TK_MULT, TK_DIVI, TK_DEC, TK_LEB, TK_RIB
-
-  /* TODO: Add more token types */
+  TK_NOTYPE = 256, TK_EQ, TK_PLUS, TK_MINU, TK_MULT, TK_DIVI, TK_DEC, TK_LEB, TK_RIB,TK_REG,TK_HEX, TK_NEQ, TK_LAND, TK_LOR, TK_NE,TK_DEFE
+	  /* TODO: Add more token types */
 
 };
 
@@ -26,11 +25,17 @@ static struct rule {
   {"\\(", TK_LEB},     //Left brace
   {"\\)", TK_RIB},		//Right brace
   {"\\+", TK_PLUS},    // plus
-  {"-", TK_MINU},		//Minus
+  {"-", TK_MINU},		//Minus 
+  {"\\*", TK_MULT},			//multiplication sign
+  {"/", TK_DIVI},			//division sign
   {"==", TK_EQ},         // equal
-  {"\\*", TK_MULT},				//multiplication sign
-  {"/", TK_DIVI},				//division sign
-  {"[0-9]+",TK_DEC}      //digital 
+  {"!=", TK_NEQ},		//Not Equal
+  {"&&", TK_LAND},
+  {"\\|\\|", TK_LOR},
+  {"[0-9]+", TK_DEC},      //digital 
+  {"\\$e[ax|cx|dx|bx|sp|bp|si|di]",TK_REG},	//reg
+  {"^0[xX][0-9a-fA-F]+", TK_HEX},
+  {"!", TK_NE}
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -59,6 +64,16 @@ typedef struct token {
 
 Token tokens[32];
 int nr_token;
+
+void check_sign(uint32_t p, uint32_t q){
+	if(tokens[p].type == TK_MULT) tokens[p].type = TK_DEFE;
+	for(int i = p + 1; i <= q; i++){
+		if(tokens[i].type == TK_MULT && tokens[i - 1].type != TK_RIB && tokens[i - 1].type != TK_DEC &&  tokens[i - 1].type != TK_HEX &&  tokens[i - 1].type != TK_REG){
+			tokens[i].type = TK_DEFE;
+		}
+	}
+}
+
 bool check_parentheses(uint32_t p, uint32_t q, bool *success ){
 	uint32_t flag = 0;
 	uint32_t n = 0;
@@ -75,7 +90,7 @@ bool check_parentheses(uint32_t p, uint32_t q, bool *success ){
 			*success = false;
 			n++;
 		}
-	}
+	} 
 	if(flag != 0) {
 		*success = false;
 		n++;
@@ -115,12 +130,18 @@ static bool make_token(char *e) {
         
 		switch (rules[i].token_type) {
 			case TK_EQ:
+			case TK_NEQ:
+			case TK_LAND:
+			case TK_LOR:
 			case TK_PLUS: 
 			case TK_MINU: 
 			case TK_MULT: 
 			case TK_DIVI: 
 			case TK_LEB: 
+			case TK_NE:
 			case TK_RIB:break;
+			case TK_HEX:
+			case TK_REG:
 			case TK_DEC:tokens[nr_token].str[0] = '\0';
 						strncat(tokens[nr_token].str, substr_start,(substr_len < 32? substr_len:32));
         }
@@ -139,7 +160,7 @@ static bool make_token(char *e) {
   if(success == false){
 	  return false;
   }
-
+  check_sign(0, nr_token - 1);
   return true;
 }
 
@@ -148,10 +169,14 @@ static bool make_token(char *e) {
 uint32_t priority(uint32_t type){			//return the priority of token
 	if(type == TK_LEB || type == TK_RIB)
 		return 1;
+	else if(type == TK_NE ||type == TK_DEFE)
+		return 2;
 	else if(type == TK_MULT || type == TK_DIVI)
 		return 3;
 	else if(type == TK_PLUS || type == TK_MINU)
 		return 4;
+	else if(type == TK_NEQ || type == TK_EQ)
+		return 7;
 	else return 0;
 
 }
@@ -184,8 +209,25 @@ uint32_t eval(uint32_t p,uint32_t q){	//evaluate
 		 * For  now this token should be a number.
 		 * return the value of the number*/
 		uint32_t n;
-		assert(sscanf(tokens[p].str,"%d",&n));
-		return n;			
+		if(tokens[p].type == TK_DEC){
+			assert(sscanf(tokens[p].str,"%d",&n));
+			return n;
+		}
+		else if(tokens[p].type == TK_HEX){
+			assert(sscanf(tokens[p].str + 2, "%x",&n));
+					return n;
+				}
+		else if(tokens[p].type == TK_REG){
+		if (strcmp(tokens[p].str, "$eax") == 0) return cpu.eax;
+		else if (strcmp(tokens[p].str, "$ebx") == 0)  return cpu.ebx;
+		else if (strcmp(tokens[p].str, "$ecx") == 0)  return cpu.ecx;
+	    else if (strcmp(tokens[p].str, "$edx") == 0)  return cpu.edx;
+	    else if (strcmp(tokens[p].str, "$ebp") == 0)  return cpu.ebp;
+	    else if (strcmp(tokens[p].str, "$esp") == 0)  return cpu.esp;
+	    else if (strcmp(tokens[p].str, "$esi") == 0)  return cpu.esi;
+	    else if (strcmp(tokens[p].str, "$edi") == 0)  return cpu.edi;
+	    else if (strcmp(tokens[p].str, "$eip") == 0)  return cpu.eip;
+		}
 	}
 	else if(check_parentheses(p,q,&success) == true){
 		/*The expression is surrounded by a matched pair of parentheses.
@@ -203,13 +245,18 @@ uint32_t eval(uint32_t p,uint32_t q){	//evaluate
 			case TK_MINU: return val1 - val2;
 			case TK_MULT: return val1 * val2;
 			case TK_DIVI: return val1 / val2;
+			case TK_NE: return !(val2);
+			case TK_DEFE: return vaddr_read(val2, 4);
+			case TK_EQ: return val1 == val2;
+			case TK_NEQ: return val1 != val2;
+			case TK_LAND: return val1 && val2;
+			case TK_LOR: return val1 || val2;
 			default:assert(0);
 		}
 		/*Todo*/
 	}
-
+	return 0;
 }
-
 
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
