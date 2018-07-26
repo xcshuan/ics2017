@@ -242,7 +242,10 @@ uint32_t eval(uint32_t p,uint32_t q){	//evaluate
 	}
 	else{
 		uint32_t op = find_op(p, q);
-		uint32_t val1 = eval(p, op - 1);
+		uint32_t val1 = 0;
+		if(tokens[op].type != TK_DEFE && tokens[op].type != TK_NE){
+			val1 = eval(p, op - 1);
+		}
 		uint32_t val2 = eval(op + 1, q);
 		printf("Testing3\n");
 		switch(tokens[op].type){
