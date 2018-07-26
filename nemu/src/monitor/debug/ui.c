@@ -56,6 +56,10 @@ static int cmd_si(char *args){
 
 static int cmd_info(char *args){
 	char *arg = strtok(NULL, " ");
+	if(arg == NULL) {
+		printf("Input Error!");
+		return 0;
+	}
 	if(strcmp("r",arg) == 0)
 	{
 		char *reg[] = {"EAX", "ECX", "EDX", "EBX", "ESP", "EBP", "ESI", "EDI"};
