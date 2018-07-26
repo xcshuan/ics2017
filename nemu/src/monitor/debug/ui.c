@@ -74,12 +74,11 @@ static int cmd_info(char *args){
 }
 
 static int cmd_p(char *args){
-	char *arg = strtok(NULL, " ");
 	bool success = false;
-	uint32_t value = expr(arg,&success);
+	uint32_t value = expr(args,&success);
 	if(success == false) {
 		printf("Input Error!");
-		cmd_c(arg);
+		cmd_c(args);
 	}
 	else printf("%d\n",value);
 
@@ -87,12 +86,12 @@ static int cmd_p(char *args){
 }
 
 static int cmd_x(char *args){
-	char *arg = strtok(NULL, " ");
+	char *cmd = strtok(NULL, " ");
     int n;
 	uint32_t addr;
 	bool success = false;
-	if(arg != NULL){
-		if(sscanf(arg,"%d", &n) != 1){		//首先保证n是整数
+	if(cmd != NULL){
+		if(sscanf(cmd,"%d", &n) != 1){		//首先保证n是整数
 			printf("Input Error!\n");
 			return 0;
 		}
@@ -102,7 +101,7 @@ static int cmd_x(char *args){
 		return 0;
 	}
 	
-	arg = strtok(NULL, " ");
+	char *arg = cmd + strlen(cmd) + 1;
 	/*if(arg != NULL){
 		if(sscanf(arg,"0x%x", &addr) != 1){
 			printf("Input Error!\n");
