@@ -32,9 +32,9 @@ static struct rule {
   {"!=", TK_NEQ},		//Not Equal
   {"&&", TK_LAND},
   {"\\|\\|", TK_LOR},
+  {"^0[xX][0-9a-fA-F]+", TK_HEX},
   {"[0-9]+", TK_DEC},      //digital 
   {"\\$e[ax|cx|dx|bx|sp|bp|si|di]",TK_REG},	//reg
-  {"^0[xX][0-9a-fA-F]+", TK_HEX},
   {"!", TK_NE}
 };
 
