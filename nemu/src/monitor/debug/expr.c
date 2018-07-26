@@ -68,7 +68,7 @@ int nr_token;
 void check_sign(uint32_t p, uint32_t q){
 	if(tokens[p].type == TK_MULT) tokens[p].type = TK_DEFE;
 	for(int i = p + 1; i <= q; i++){
-		if(tokens[i].type == TK_MULT && tokens[i - 1].type != TK_RIB && tokens[i - 1].type != TK_DEC &&  tokens[i - 1].type != TK_HEX &&  tokens[i - 1].type != TK_REG){
+		if(tokens[i].type == TK_MULT && (tokens[i - 1].type != TK_RIB || tokens[i - 1].type != TK_DEC ||  tokens[i - 1].type != TK_HEX ||  tokens[i - 1].type != TK_REG)){
 			tokens[i].type = TK_DEFE;
 		}
 	}
@@ -155,11 +155,11 @@ static bool make_token(char *e) {
       return false;
     }
   }
- // bool success;
-  /*check_parentheses(0, nr_token - 1, &success);
+  bool success = true;
+  check_parentheses(0, nr_token - 1, &success);
   if(success == false){
 	  return false;
-  }*/
+  }
   check_sign(0, nr_token - 1);
   return true;
 }
