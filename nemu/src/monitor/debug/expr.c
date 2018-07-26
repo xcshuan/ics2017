@@ -251,7 +251,8 @@ uint32_t eval(uint32_t p,uint32_t q){	//evaluate
 			case TK_MULT: return val1 * val2;
 			case TK_DIVI: return val1 / val2;
 			case TK_NE: return !(val2);
-			case TK_DEFE: return vaddr_read(val2, 4);
+			case TK_DEFE: printf("Testing4\n"); 
+						return vaddr_read(val2, 4);
 			case TK_EQ: return val1 == val2;
 			case TK_NEQ: return val1 != val2;
 			case TK_LAND: return val1 && val2;
