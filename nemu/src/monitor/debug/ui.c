@@ -81,7 +81,7 @@ static int cmd_p(char *args){
 		printf("Input Error!");
 		cmd_c(arg);
 	}
-	else printf("%d/n",value);
+	else printf("%d\n",value);
 
 	return 0;
 }
