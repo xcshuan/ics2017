@@ -155,11 +155,11 @@ static bool make_token(char *e) {
       return false;
     }
   }
-  bool success;
-  check_parentheses(0, nr_token - 1, &success);
+ // bool success;
+  /*check_parentheses(0, nr_token - 1, &success);
   if(success == false){
 	  return false;
-  }
+  }*/
   check_sign(0, nr_token - 1);
   return true;
 }
