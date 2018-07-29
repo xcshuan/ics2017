@@ -69,7 +69,7 @@ static int cmd_info(char *args){
 	}	
 	else if(strcmp("w", arg) == 0)
 	{
-
+		info_w();
 	}
 	else{
 		printf("Input Error ! Please input \"info\" with \"r\" or \"w\"\n");
@@ -130,6 +130,12 @@ static int cmd_x(char *args){
 }
 
 static int cmd_w(char *args){
+	bool success = false;
+	WP *q = new_wp(args);
+	if(q != NULL){
+		q->old_value = expr(args, &success);
+		printf("Num : %d,what : %s,value : %d", q->NO, q->expr,q->old_value);
+	}
 	return 0;
 }
 
