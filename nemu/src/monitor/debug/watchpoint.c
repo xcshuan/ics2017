@@ -36,10 +36,10 @@ WP* new_wp(char *str){
 					head->next = NULL;
 				}
 				else{
-					q->next = head->next;
+					q->next = head;
 					head = q;
-					printf("head = %d\n",head->NO);
-					if(head->next!=NULL) printf("head-next = %d\n",head->NO);
+					//printf("head = %d\n",head->NO);
+					//if(head->next!=NULL) printf("head-next = %d\n",head->NO);
 				}
 				return q;
 			}
