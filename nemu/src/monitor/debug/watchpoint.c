@@ -57,19 +57,27 @@ void free_wp(int num){
 	WP *p = head;
 	WP *q = head->next;
 	int flag = 0;
-	while(q != NULL){
-		if(q->NO == num){
-			p->next = q->next;
-			q->next = free_;
-			free_=q;
-			flag++;
-			break;
+	if(p->NO == num){
+		p->next = free_;
+		free_ = p;
+		head = NULL;
+		flag++;
+	}
+	else{
+		while(q != NULL){
+			if(q->NO == num){
+				p->next = q->next;
+				q->next = free_;
+				free_=q;
+				flag++;
+				break;
+			}
+			p = p->next;
+			q = p->next;
 		}
-		p = p->next;
-		q = p->next;
 	}
 	if(flag > 0) printf("watchpoint %d is deleted\n", num);
-	else printf("The %d watchpoint is not existed", num);
+	else printf("The %d watchpoint is not existed\n", num);
 }
 
 void info_w()
