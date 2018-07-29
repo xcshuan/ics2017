@@ -29,6 +29,8 @@ WP* new_wp(char *str){
 				WP* q;
 				q = free_;
 				free_ = free_->next;
+				strcpy(q->expr, str);
+				q->old_value = value;
 				if(head == NULL){
 					head = q;
 					head->next = NULL;
@@ -36,9 +38,9 @@ WP* new_wp(char *str){
 				else{
 					q->next = head->next;
 					head = q;
+					printf("head = %d\n",head->NO);
+					if(head->next!=NULL) printf("head-next = %d\n",head->NO);
 				}
-				strcpy(head->expr, str);
-				head->old_value = value;
 				return q;
 			}
 		else{
@@ -104,6 +106,7 @@ bool check_w(){
 				printf("Watchpoint %d is triggered\n", p->NO);
 				printf("old value = %d\nnew value = %d\n",p->old_value,new_value);
 				flag++;
+				p->old_value = new_value;
 			}
 		}
 		p = p->next;
