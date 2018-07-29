@@ -22,7 +22,7 @@ void init_wp_pool() {
 
 WP* new_wp(char *str){
 	if(free_ != NULL){
-		WP* q;
+		WP *q;
 		q = free_;
 		free_ = free_->next;
 		q->next = head->next;
@@ -54,10 +54,11 @@ void free_wp(WP wp){
 void info_w()
 {
 	printf("Num\tWhat\tValue\t");
-	WP* p = head;
-	printf("%d\t%s\t%d",p->NO,p->expr,p->old_value);
+	WP *p = head;
+	if(p == NULL) printf("No watchpoint now");
 	while(p != NULL)
 	{
+		printf("%d\t%s\t%d",p->NO,p->expr,p->old_value);
 		p = p->next;
 	}
 }
