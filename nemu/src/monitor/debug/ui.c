@@ -94,7 +94,7 @@ static int cmd_x(char *args){
     int n;
 	uint32_t addr;
 	bool success = false;
-	if(cmd != NULL){
+	if(cmd != NULL){ 
 		if(sscanf(cmd,"%d", &n) != 1){		//首先保证n是整数
 			printf("Input Error!\n");
 			return 0;
@@ -133,13 +133,20 @@ static int cmd_w(char *args){
 	bool success = false;
 	WP *q = new_wp(args);
 	if(q != NULL){
+		printf("Watch %s\n",q->expr);
 		q->old_value = expr(args, &success);
-		printf("Num : %d,what : %s,value : %d", q->NO, q->expr,q->old_value);
+		printf("Num : %d,what : %s,value : %d\n", q->NO, q->expr,q->old_value);
 	}
 	return 0;
 }
 
 static int cmd_d(char *args){
+	char *arg = strtok(NULL," ");
+	int n;
+	if(sscanf(arg, "%d", &n)==1){
+		free_wp(n);
+	}
+	else printf("Input Error!");
 	return 0;
 }
 

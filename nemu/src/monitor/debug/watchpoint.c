@@ -22,13 +22,23 @@ void init_wp_pool() {
 
 WP* new_wp(char *str){
 	if(free_ != NULL){
-		WP *q;
-		q = free_;
-		free_ = free_->next;
-		q->next = head->next;
-		head = q;
-		strcpy(head->expr, str);
-		return q;
+		bool sucess = false;
+		int value;
+		value = expr(str,&sucess);
+		if(sucess == true){
+				WP *q;
+				q = free_;
+				free_ = free_->next;
+				q->next = head->next;
+				head = q;
+				strcpy(head->expr, str);
+				q->old_value = value;
+				return q;
+			}
+		else{
+			printf("Input Error!");
+			return NULL;
+		}
 	}
 	else{
 		printf("No more free space for new watchpoint!");
@@ -36,29 +46,53 @@ WP* new_wp(char *str){
 	}
 }
 
-void free_wp(WP wp){
+void free_wp(int num){
 	WP *p = head;
 	WP *q = head->next;
+	int flag = 0;
 	while(q != NULL){
-		if(q->NO == wp.NO){
+		if(q->NO == num){
 			p->next = q->next;
 			q->next = free_;
 			free_=q;
+			flag++;
 			break;
 		}
 		p = p->next;
 		q = p->next;
 	}
+	if(flag > 0) printf("watchpoint %d is deleted\n", num);
+	else printf("The %d watchpoint is not existed", num);
 }
 
 void info_w()
 {
-	printf("Num\tWhat\tValue\t");
+	printf("Num\tWhat\tValue\t\n");
 	WP *p = head;
-	if(p == NULL) printf("No watchpoint now");
+	if(p == NULL) printf("No watchpoint now\n");
 	while(p != NULL)
 	{
-		printf("%d\t%s\t%d",p->NO,p->expr,p->old_value);
+		printf("%d\t%s\t%d\n",p->NO,p->expr,p->old_value);
+		p = p->next;
+
+	}
+}
+bool check_w(){
+	WP *p = head;
+	int flag = 0;
+	bool sucess = false;
+	while(p != NULL){
+		uint32_t new_value = expr(p->expr,&sucess);
+		if(sucess == false) printf("Error!");
+		else{
+			if(new_value != p->old_value){
+				printf("Watchpoint %d is triggered\n", p->NO);
+				printf("old value = %d\nnew value = %d\n",p->old_value,new_value);
+				flag++;
+			}
+		}
 		p = p->next;
 	}
+	if(flag != 0) return false;
+	else return true;
 }
