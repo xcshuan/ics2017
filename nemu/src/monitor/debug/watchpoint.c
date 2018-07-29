@@ -26,13 +26,19 @@ WP* new_wp(char *str){
 		int value;
 		value = expr(str,&sucess);
 		if(sucess == true){
-				WP *q;
+				WP* q;
 				q = free_;
 				free_ = free_->next;
-				q->next = head->next;
-				head = q;
+				if(head == NULL){
+					head = q;
+					head->next = NULL;
+				}
+				else{
+					q->next = head->next;
+					head = q;
+				}
 				strcpy(head->expr, str);
-				q->old_value = value;
+				head->old_value = value;
 				return q;
 			}
 		else{
@@ -47,6 +53,7 @@ WP* new_wp(char *str){
 }
 
 void free_wp(int num){
+	if(head ==NULL) return;
 	WP *p = head;
 	WP *q = head->next;
 	int flag = 0;
