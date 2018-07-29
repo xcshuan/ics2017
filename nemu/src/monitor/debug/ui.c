@@ -130,11 +130,9 @@ static int cmd_x(char *args){
 }
 
 static int cmd_w(char *args){
-	bool success = false;
 	WP *q = new_wp(args);
 	if(q != NULL){
 		printf("Watch %s\n",q->expr);
-		q->old_value = expr(args, &success);
 		printf("Num : %d,what : %s,value : %d\n", q->NO, q->expr,q->old_value);
 	}
 	return 0;
