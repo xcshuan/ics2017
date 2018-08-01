@@ -35,8 +35,15 @@ typedef struct {
    * in PA2 able to directly access these registers.
    */
  // rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-
-  vaddr_t eip;
+ struct{
+	 int CF:1;
+	 int ZF:1;
+	 int SF:1;
+	 int IF:1;
+	 int OF:1;
+ }eflags;
+ 
+ vaddr_t eip;
 
 } CPU_state;
 
