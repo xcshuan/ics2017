@@ -13,8 +13,9 @@ make_EHelper(and) {
 }
 
 make_EHelper(xor) {
-  TODO();
-
+	uint32_t result = id_src->val ^ id_dest->val;
+	rtl_update_ZFSF(&result, id_dest->width);
+	id_dest->val = result;
   print_asm_template2(xor);
 }
 
