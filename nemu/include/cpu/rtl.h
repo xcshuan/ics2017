@@ -179,9 +179,9 @@ static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
 static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
   int zf = 0;
-  if(width == 1) zf = !(*result & 0x00000011);
-  else if(width == 2) zf = !(*result & 0x00001111);
-  else if(width == 4) zf = !(*result & 0x11111111);
+  if(width == 1) zf = !(*result & 0x000000ff);
+  else if(width == 2) zf = !(*result & 0x0000ffff);
+  else if(width == 4) zf = !(*result & 0xffffffff);
   cpu.eflags.ZF = zf;
 
 }
