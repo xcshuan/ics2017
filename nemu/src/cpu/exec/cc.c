@@ -14,14 +14,31 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
   // TODO: Query EFLAGS to determine whether the condition code is satisfied.
   // dest <- ( cc is satisfied ? 1 : 0)
   switch (subcode & 0xe) {
-    case CC_O:
-    case CC_B:
-    case CC_E:
-    case CC_BE:
-    case CC_S:
-    case CC_L:
-    case CC_LE:
-      TODO();
+    case CC_O:  //0
+			*dest = cpu.eflags.OF;
+			break;
+    case CC_B:  //2
+			*dest = cpu.eflags.CF;
+			break;
+    case CC_E:  //4
+			//printf("i am here\n");
+			//printf("zf = %d\n", cpu.eflags.ZF); 
+			*dest = cpu.eflags.ZF;
+			break;
+		case CC_BE: //6
+			//printf("switch = %x\n", subcode&0xe); 
+			*dest = ((cpu.eflags.CF) || (cpu.eflags.ZF));
+			//printf("dest = %d\n", *dest);
+			break;
+    case CC_S:  //8
+			*dest = cpu.eflags.SF;
+			break;
+		case CC_L:  //12 c
+			*dest = (cpu.eflags.SF != cpu.eflags.OF);
+			break;
+    case CC_LE: //14 e
+			*dest = ((cpu.eflags.ZF) || (cpu.eflags.SF != cpu.eflags.OF));
+			break;
     default: panic("should not reach here");
     case CC_P: panic("n86 does not have PF");
   }
