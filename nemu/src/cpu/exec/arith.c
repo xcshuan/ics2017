@@ -87,22 +87,25 @@ make_EHelper(dec) {
 }
 
 make_EHelper(neg) {
-	rtl_sub(&t2, &tzero, &id_dest->val);
+	rtl_add(&t2, &tzero, &id_dest->val);
+	t2 = -t2;
 	operand_write(id_dest, &t2);
 
 	if(id_dest->val == 0){
 		rtl_set_CF(&tzero);
 	}
 	else{
-		t1 = 1;
+		rtl_addi(&t1, &tzero,1);
 		rtl_set_CF(&t1);
 	}
 	
 	rtl_update_ZFSF(&t2, id_dest->width);
 	
-	rtl_and(&t1, &t2, &id_dest->val);
-	rtl_msb(&t1,&t1,id_dest->width);
-	rtl_set_OF(&t1);
+	rtl_xor(&t0, &id_dest->val,&id_dest->val);
+	rtl_xor(&t1, &id_dest->val,&t2);
+	rtl_and(&t0,&t0,&t1);
+	rtl_msb(&t0,&t0,id_dest->width);
+	rtl_set_OF(&t0);
 
 	print_asm_template1(neg);
 
