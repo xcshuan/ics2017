@@ -38,18 +38,17 @@ static inline make_DopHelper(SI) {
    *
    op->simm = ???
    */
- // TODO();
-/*  if (op->width == 4) {
-	  op->simm = instr_fetch(eip, op->width);
+  // TODO();
+  if (op->width == 4) {
+	  op->simm = (int32_t)instr_fetch(eip, op->width);
   }
   else if (op->width == 2) {
-	  op->simm = instr_fetch(eip, op->width)) & 0x0000ffff;
+	  op->simm = (int16_t)instr_fetch(eip, op->width);
   }
   else {
-	  op->simm = instr_fetch(eip, op->width)) & 0x000000ff;
-  }*/
+	  op->simm =(int8_t) instr_fetch(eip, op->width);
+  }
   
-  op->simm = instr_fetch(eip, op->width); 
   rtl_li(&op->val, op->simm);
 
 #ifdef DEBUG
@@ -274,7 +273,6 @@ make_DHelper(J) {
   decode_op_SI(eip, id_dest, false);
   // the target address can be computed in the decode stage
   decoding.jmp_eip = id_dest->simm + *eip;
-  printf("id->simm = %d, *eip = %d,eip = %d\n",id_dest->simm, *eip,cpu.eip);
 }
 
 make_DHelper(push_SI) {
