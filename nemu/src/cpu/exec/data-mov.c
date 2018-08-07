@@ -7,18 +7,22 @@ make_EHelper(mov) {
 
 make_EHelper(push) {
   //TODO();
+  if(id_dest->width == 1){
+	  rtl_sext(&id_dest->val, &id_dest->val,id_dest->width);
+  }
   rtl_push(&id_dest->val);
   print_asm_template1(push);
 }
 
 make_EHelper(pop) {
   //TODO();
-  rtl_pop(&id_dest->val);
+  rtl_pop(&t0);
+  operand_write(id_dest,&t0);
   print_asm_template1(pop);
 }
 
 make_EHelper(pusha) {
-	t0 = cpu.eip;
+	t0 = cpu.esp;
 	for(int i = R_EAX;i <= R_EDI; i++){
 	  if(i != R_ESP){
 		  rtl_push(&cpu.gpr[i]._32);
