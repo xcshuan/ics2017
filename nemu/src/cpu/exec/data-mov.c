@@ -8,7 +8,7 @@ make_EHelper(mov) {
 make_EHelper(push) {
   //TODO();
   if(id_dest->width == 1){
-	  rtl_sext(&id_dest->val, &id_dest->val,id_dest->width);
+	  id_dest->val = (int32_t)(int8_t)id_dest->val;
   }
   rtl_push(&id_dest->val);
   print_asm_template1(push);
