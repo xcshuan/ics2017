@@ -86,7 +86,6 @@ static inline void restart() {
   rtl_set_ZF(&tzero);
   rtl_set_SF(&tzero);
   rtl_set_OF(&tzero);
-  rtl_set_IF(&tzero);
 
 #ifdef DIFF_TEST
   init_qemu_reg();

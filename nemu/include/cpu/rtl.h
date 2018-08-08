@@ -123,7 +123,6 @@ make_rtl_setget_eflags(CF)
 make_rtl_setget_eflags(OF)
 make_rtl_setget_eflags(ZF)
 make_rtl_setget_eflags(SF)
-make_rtl_setget_eflags(IF)
 
 static inline void rtl_mv(rtlreg_t* dest, const rtlreg_t *src1) {
   // dest <- src1
@@ -138,11 +137,11 @@ static inline void rtl_not(rtlreg_t* dest) {
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
   switch(width){
-	  case 1: *dest =(int16_t)(int8_t)(uint8_t) *src1;
+	  case 1: *dest =(int32_t)(int16_t)(int8_t) *src1;
 			  return;
-	  case 2: *dest =(int16_t)(uint16_t) *src1;
+	  case 2: *dest =(int32_t)(int16_t) *src1;
 			  return;
-	  case 4: *dest =  *src1;
+	  case 4: *dest = (int32_t) *src1;
 			  return;
   }
 }
@@ -188,7 +187,7 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   if(width == 1) zf = (*result & 0x000000ff) | 0;
   else if(width == 2) zf = (*result & 0x0000ffff) | 0;
   else if(width == 4) zf = (*result & 0xffffffff) | 0;
-  cpu.eflags.ZF = zf;
+  cpu.eflags.ZF = (zf == 0) ? 1 : 0;
 
 }
 
