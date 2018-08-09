@@ -35,13 +35,18 @@ typedef struct {
    * in PA2 able to directly access these registers.
    */
  // rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
- struct{
-	 uint8_t CF:1;
-	 uint8_t ZF:1;
-	 uint8_t SF:1;
-	 uint8_t IF:1;
-	 uint8_t OF:1;
- }eflags;
+union
+  {
+			rtlreg_t eflags_init;
+      struct
+      {
+          unsigned int CF:1;
+          unsigned int ZF:1;
+          unsigned int SF:1;
+          unsigned int IF:1;
+          unsigned int OF:1;
+      };
+  }eflags;
  
  vaddr_t eip;
 
