@@ -152,9 +152,9 @@ void difftest_step(uint32_t eip) {
   // Set `diff` as `true` if they are not the same.
   TODO();
 
-  if(r.eax != cpu.eax || r.ecx != cpu.ecx || r.edx != cpu.edx ||
-	 r.ebx != cpu.ebx || r.esp != cpu.esp || r.ebp != cpu.ebp ||
-	 r.esi != cpu.esi || r.edi != cpu.edi){
+  if(r.eax != mine.eax || r.ecx != mine.ecx || r.edx != mine.edx ||
+	 r.ebx != mine.ebx || r.esp != mine.esp || r.ebp != mine.ebp ||
+	 r.esi != mine.esi || r.edi != mine.edi){
 	  diff = true;
 	  printf("qemus eax:0x%08x, mine eax:0x%08x @eip:0x%08x\n", r.eax, mine.eax, mine.eip);
 	  printf("qemus ecx:0x%08x, mine ecx:0x%08x @eip:0x%08x\n", r.ecx, mine.ecx, mine.eip);
