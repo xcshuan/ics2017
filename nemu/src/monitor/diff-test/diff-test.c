@@ -151,6 +151,11 @@ void difftest_step(uint32_t eip) {
   // Set `diff` as `true` if they are not the same.
   TODO();
 
+  for(int i = R_EAX;i <= R_EDI;i++){
+	  if(cpu.gpr[i]._32 != r.array[i])
+		  diff = true;
+
+  }
   if (diff) {
     nemu_state = NEMU_END;
   }
