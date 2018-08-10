@@ -150,7 +150,7 @@ void difftest_step(uint32_t eip) {
 
   // TODO: Check the registers state with QEMU.
   // Set `diff` as `true` if they are not the same.
-  TODO();
+  //TODO();
 
   if(r.eax != mine.eax || r.ecx != mine.ecx || r.edx != mine.edx ||
 	 r.ebx != mine.ebx || r.esp != mine.esp || r.ebp != mine.ebp ||
