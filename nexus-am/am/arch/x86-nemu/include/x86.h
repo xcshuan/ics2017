@@ -116,7 +116,7 @@ static inline uint8_t inb(int port) {
   return data;
 }
 
-static inline uint32_t inl(int port) {
+inline uint32_t inl(int port) {
   long data;
   asm volatile("inl %1, %0" : "=a"(data) : "d"((uint16_t)port));
   return data;
