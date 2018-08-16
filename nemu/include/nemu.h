@@ -5,4 +5,5 @@
 #include "memory/memory.h"
 #include "cpu/reg.h"
 #include "cpu/rtl.h"
+#include "device/mmio.h"
 #endif
