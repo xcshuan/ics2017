@@ -29,8 +29,8 @@ void _draw_rect(const uint32_t *pixels, int x, int y, int w, int h) {
     //fb[i] = i;
   //}
   int col, row;
-  for(row = y;row < y + h;row++)
-	  for(col = x;col < x + w; col++)
+  for(row = y;row <= y + h;row++)
+	  for(col = x;col <= x + w; col++)
 		  fb[col+row*_screen.width] = pixels[(row - y)*w + (col - x)];
 }
 
