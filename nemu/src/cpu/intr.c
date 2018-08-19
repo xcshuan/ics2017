@@ -7,14 +7,12 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
    */
 
   //TODO();
-  Log("it is raise_intr,NO = %d",NO);
   union{
 	  GateDesc gd;
 	  struct{uint32_t lo,hi;};
   }item;
   vaddr_t addr;
   addr = 8 * NO + cpu.idtr.base;
-  Log("idtr base = %d",cpu.idtr.base);
   item.lo = vaddr_read(addr,4);
   item.hi = vaddr_read(addr + 4, 4);
 
