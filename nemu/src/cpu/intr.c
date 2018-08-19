@@ -7,6 +7,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
    */
 
   //TODO();
+  Log("it is raise_intr,NO = %d",NO);
   union{
 	  GateDesc gd;
 	  struct{uint32_t lo,hi;};
