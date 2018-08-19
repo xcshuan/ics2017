@@ -41,13 +41,25 @@ union
       struct
       {
           unsigned int CF:1;
+		  unsigned int p0:1;
+		  unsigned int PF:1;
+		  unsigned int p1:1;
+		  unsigned int AF:1;
+		  unsigned int p2:1;
           unsigned int ZF:1;
           unsigned int SF:1;
+		  unsigned int TF:1;
           unsigned int IF:1;
+		  unsigned int DF:1;
           unsigned int OF:1;
       };
   }eflags;
- 
+struct{
+   uint16_t limit;
+   uint32_t base;
+}idtr;
+ uint16_t cs;
+
  vaddr_t eip;
 
 } CPU_state;
