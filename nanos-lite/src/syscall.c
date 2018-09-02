@@ -3,13 +3,13 @@
 
 ssize_t _sys_write(int fd, const void *buf, size_t count){
 	Log("sys_write!");
+	uintptr_t i = 0;
 	if(fd == 1 || fd == 2){
-		int i = 0;
-		while(i < count){
+		for(; count > 0;count--){
 			_putc(((char *)buf)[i]);
 			i++;
 		}
-		return count;
+		return i;
 	}
 	else return -1;
 }
@@ -21,6 +21,7 @@ _RegSet* do_syscall(_RegSet *r) {
   a[2] = SYSCALL_ARG3(r);
   a[3] = SYSCALL_ARG4(r);
 
+  Log("a[0] = %d",a[0]);
   switch (a[0]) {
 	  case SYS_none:r->eax = 1;
 					break;
