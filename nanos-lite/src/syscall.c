@@ -3,8 +3,9 @@
 
 ssize_t sys_write(int fd, const void *buf, size_t count){
 	if(fd == 1 || fd == 2){
-		for(int i = 0; i < count; i++){
-			_putc(((char *)buf)[i]);
+		int i = 0;
+		while(i < count){
+			_putc(((char *)buf)[i++]);
 		}
 		return count;
 	}
