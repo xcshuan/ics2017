@@ -4,7 +4,7 @@
 extern char _end;
 
 ssize_t _sys_write(int fd, const void *buf, size_t count){
-	Log("sys_write!");
+	Log("sys_write!count = %d",count);
 	ssize_t i = 0;
 	if(fd == 1 || fd == 2){
 		for(;i < count;i++){
