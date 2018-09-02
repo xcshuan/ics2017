@@ -34,7 +34,8 @@ void *_sbrk(intptr_t increment){
 	extern char _end;
 	static void *prog_brk = (void *)&_end;
 
-	void *old = prog_brk;
+	void *old;
+	old = prog_brk;
 	_putc('1');
 	if(_syscall_(SYS_brk,(uintptr_t)prog_brk,0,0) == 0){
 		prog_brk += increment;
