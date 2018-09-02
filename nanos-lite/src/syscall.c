@@ -7,11 +7,10 @@ ssize_t _sys_write(int fd, const void *buf, size_t count){
 	Log("sys_write!");
 	ssize_t i = 0;
 	if(fd == 1 || fd == 2){
-		for(; count > 0;count--){
+		while(i++ < count){
 			_putc(((char *)buf)[i]);
-			i++;
 		}
-		return i;
+		return count;
 	}
 	return -1;
 }
