@@ -11,7 +11,7 @@ ssize_t _sys_write(int fd, const void *buf, size_t count){
 		}
 		return i;
 	}
-	else return -1;
+	return -1;
 }
 
 _RegSet* do_syscall(_RegSet *r) {
