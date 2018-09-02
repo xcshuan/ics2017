@@ -11,8 +11,6 @@
 
 // FIXME: this is temporary
 
-extern char _end;
-static void *prog_brk = (void *)&_end;
 
 int _syscall_(int type, uintptr_t a0, uintptr_t a1, uintptr_t a2){
   int ret = -1;
@@ -33,11 +31,14 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
+	extern char _end;
+	static void *prog_brk = (void *)&_end;
+
 	void *old = prog_brk;
 	_putc('1');
 	if(_syscall_(SYS_brk,(uintptr_t)prog_brk,0,0) == 0){
 		prog_brk += increment;
-		return (void *)old;
+		return old;
 	}
   return (void *)-1;
 }
