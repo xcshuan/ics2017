@@ -31,7 +31,6 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-	Log("455565565");
 	extern char _end;
 	static void *prog_brk = (void *)&_end;
 
