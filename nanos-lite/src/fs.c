@@ -79,7 +79,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 off_t fs_lseek(int fd , off_t offset, int whence){
 	Log("fd = %d",fd);
 	Finfo *file = &file_table[fd];
-	switch(fd){
+	switch(whence){
 		case SEEK_SET:file->open_offset = offset;
 					  break;
 		case SEEK_CUR:file->open_offset += offset;
