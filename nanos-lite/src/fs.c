@@ -59,11 +59,12 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 ssize_t fs_write(int fd, const void *buf, size_t len){
 	Log("fd = %d",fd);
 	Finfo *file = &file_table[fd];
+	int i = 0;
 
 	switch(fd){
 		case FD_STDOUT:
 		case FD_STDERR:
-			for(int i = 0;i < len;i++)
+			for(;i < len;i++)
 				_putc(((char *)buf)[i]);
 			return len;
 		default:if(fd < 6 || fd >= NR_FILES)
