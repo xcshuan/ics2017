@@ -43,7 +43,7 @@ int fs_open(const char *pathname, int flags, int mode){
 }
 
 ssize_t fs_read(int fd, void *buf, size_t len){
-	Log("fd = %d");
+	Log("fd = %d,size = %d",fd,file_table[fd].size);
 	Finfo *file = &file_table[fd];
 	int count = file->open_offset + len;
 	if(file->open_offset >= file->size) return 0;
