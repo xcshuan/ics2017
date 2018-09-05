@@ -30,9 +30,11 @@ void init_fs() {
 }
 
 int fs_open(const char *pathname, int flags, int mode){
+	Log("pathname:%s",pathname);
 	for(int i = 0; i < NR_FILES; i++){
 		if(strcmp(file_table[i].name,pathname) == 0){
 			file_table[i].open_offset = 0;
+			Log("OK!!");
 			return i;
 		}
 	}
@@ -41,6 +43,7 @@ int fs_open(const char *pathname, int flags, int mode){
 }
 
 ssize_t fs_read(int fd, void *buf, size_t len){
+	Log("fd = %d");
 	Finfo *file = &file_table[fd];
 	int count = file->open_offset + len;
 	if(file->open_offset >= file->size) return 0;
@@ -54,8 +57,8 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 }
 
 ssize_t fs_write(int fd, const void *buf, size_t len){
+	Log("fd = %d",fd);
 	Finfo *file = &file_table[fd];
-
 
 	switch(fd){
 		case FD_STDOUT:
@@ -74,6 +77,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 }
 
 off_t fs_lseek(int fd , off_t offset, int whence){
+	Log("fd = %d",fd);
 	Finfo *file = &file_table[fd];
 	switch(fd){
 		case SEEK_SET:file->open_offset = offset;
