@@ -85,6 +85,7 @@ off_t fs_lseek(int fd , off_t offset, int whence){
 		case SEEK_CUR:file->open_offset += offset;
 					  break;
 		case SEEK_END:file->open_offset = file->size + offset;
+					  break;
 		default:return -1;
 	}
 
