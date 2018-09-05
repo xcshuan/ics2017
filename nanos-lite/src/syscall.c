@@ -1,5 +1,6 @@
 #include "common.h"
 #include "syscall.h"
+#include "fs.h"
 
 extern char _end;
 
@@ -28,7 +29,15 @@ _RegSet* do_syscall(_RegSet *r) {
 					break;
 	  case SYS_exit:_halt(a[1]);
 					break;
-	  case SYS_write:r->eax = _sys_write(a[1],(void *)a[2],a[3]);
+	  case SYS_write:r->eax = fs_write(a[1],(void *)a[2],a[3]);
+					 break;
+	  case SYS_open:r->eax = fs_open((char *)a[1],a[2],a[3]);
+					break;
+	  case SYS_read:r->eax = fs_read(a[1], (char *)a[2],a[3]);
+					break;
+	  case SYS_lseek:r->eax = fs_lseek(a[1],a[2],a[3]);
+					 break;
+	  case SYS_close:r->eax = fs_close(a[1]);
 					 break;
 	  case SYS_brk:r->eax = 0;
 				   break;
