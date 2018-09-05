@@ -53,6 +53,7 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 	
 	assert(fd >= 6 && fd <= NR_FILES);
 	ramdisk_read(buf, file->disk_offset + file->open_offset,len);
+	Log("Finish read");
 	return len;
 }
 
@@ -73,6 +74,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 				int count = file->open_offset + len;
 				len = count > file->size ? (file->size - file->open_offset) : len;
 				ramdisk_write(buf,file->disk_offset + file->open_offset,len);
+				Log("Finish write");
 				return len;
 	}
 }
