@@ -49,10 +49,9 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 	if(file->open_offset >= file->size) return 0;
 	len = count > file->size ? (file->size - file->open_offset) : len;
 	
-
-	
 	assert(fd >= 6 && fd <= NR_FILES);
 	ramdisk_read(buf, file->disk_offset + file->open_offset,len);
+	file->open_offset += len;
 	Log("Finish read, len = %d", len);
 	return len;
 }
@@ -76,12 +75,13 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 				len = count > file->size ? (file->size - file->open_offset) : len;
 				ramdisk_write(buf,file->disk_offset + file->open_offset,len);
 				Log("Finish write,len = %d",len);
+				file->open_offset += len;
 				return len;
 	}
 }
 
 off_t fs_lseek(int fd , off_t offset, int whence){
-	Log("fd = %d",fd);
+	Log("fd = %d, offset = %d, whence = %d",fd, offset, whence);
 	Finfo *file = &file_table[fd];
 	switch(whence){
 		case SEEK_SET:file->open_offset = offset;
