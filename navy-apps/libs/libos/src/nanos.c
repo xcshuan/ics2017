@@ -30,8 +30,8 @@ int _write(int fd, void *buf, size_t count){
 	return 	_syscall_(SYS_write,fd,(uintptr_t)buf,count);
 }
 
-void *_sbrk(intptr_t increment){
 	extern char _end;
+void *_sbrk(intptr_t increment){
 	static void *prog_brk = (void *)&_end;
 
 	void *old;
