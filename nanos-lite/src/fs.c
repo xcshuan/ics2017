@@ -89,6 +89,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 			for(;i < len;i++)
 				_putc(((char *)buf)[i]);
 			return len;
+
 		case FD_FB:
 			fb_write(buf,file->open_offset,len);
 			break;
