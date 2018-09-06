@@ -25,7 +25,8 @@ _RegSet* do_syscall(_RegSet *r) {
 
   //Log("a[0] = %d",a[0]);
   switch (a[0]) {
-	  case SYS_none:r->eax = 1;
+	  case SYS_none:Log("None");
+		  r->eax = 1;
 					break;
 	  case SYS_exit:_halt(a[1]);
 					break;
