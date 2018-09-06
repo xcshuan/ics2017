@@ -30,7 +30,8 @@ _RegSet* do_syscall(_RegSet *r) {
 					break;
 	  case SYS_exit:_halt(a[1]);
 					break;
-	  case SYS_write:r->eax = fs_write(a[1],(void *)a[2],a[3]);
+	  case SYS_write:Log("write");
+					r->eax = fs_write(a[1],(void *)a[2],a[3]);
 					 break;
 	  case SYS_open:r->eax = fs_open((char *)a[1],a[2],a[3]);
 					break;
