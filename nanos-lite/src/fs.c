@@ -58,7 +58,7 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 }
 
 ssize_t fs_write(int fd, const void *buf, size_t len){
-	Log("fd = %d",fd);
+	//Log("fd = %d",fd);
 	Finfo *file = &file_table[fd];
 	int i = 0;
 
@@ -70,6 +70,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 			return len;
 		default:if(fd < 6 || fd >= NR_FILES)
 					return -1;
+				Log("fd = %d",fd);
 				if(file->open_offset >= file->size) return 0;
 				int count = file->open_offset + len;
 				len = count > file->size ? (file->size - file->open_offset) : len;
