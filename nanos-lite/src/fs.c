@@ -81,7 +81,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 	int i = 0;
 	int count = file->open_offset + len;
 	int nwrite = count > file->size ? (file->size - file->open_offset) : len;
-	assert(file->open_offset <= file->size);
+	if(file->open_offset > file->size) nwrite = 0;
 	
 	switch(fd){
 		case FD_STDOUT:
