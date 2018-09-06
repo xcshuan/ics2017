@@ -2,6 +2,8 @@
 
 extern void ramdisk_read(void *buf, off_t offset, size_t len);
 extern void ramdisk_write(const void *buf, off_t offset, size_t len);
+extern void fb_write(const void *buf, off_t offset, size_t len);
+extern void dispinfo_read(void *buf, off_t offset, size_t len);
 
 typedef struct {
   char *name;
@@ -27,6 +29,10 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+
+	file_table[3].size = _screen.width * _screen.height * sizeof(uint32_t);
+	file_table[3].open_offset = 0;
+
 }
 
 int fs_open(const char *pathname, int flags, int mode){
@@ -46,11 +52,21 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 	Log("fd = %d,size = %d",fd,file_table[fd].size);
 	Finfo *file = &file_table[fd];
 	int count = file->open_offset + len;
-	if(file->open_offset >= file->size) return 0;
 	len = count > file->size ? (file->size - file->open_offset) : len;
-	
-	assert(fd >= 6 && fd <= NR_FILES);
-	ramdisk_read(buf, file->disk_offset + file->open_offset,len);
+
+	switch(fd){
+		case FD_STDIN:
+		case FD_STDERR:
+			return -1;
+
+		case FD_DISPINFO:dispinfo_read(buf, file->open_offset,len);
+						 break;
+
+		default:
+			if(file->open_offset >= file->size) return 0;
+			assert(fd >= 6 && fd <= NR_FILES);
+			ramdisk_read(buf, file->disk_offset + file->open_offset,len);
+	}
 	file->open_offset += len;
 	Log("Finish read, len = %d", len);
 	return len;
@@ -60,29 +76,35 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 	//Log("fd = %d",fd);
 	Finfo *file = &file_table[fd];
 	int i = 0;
-
+	int count = file->open_offset + len;
+	len = count > file->size ? (file->size - file->open_offset) : len;
+	if(file->open_offset >= file->size) return 0;
+	
 	switch(fd){
 		case FD_STDOUT:
 		case FD_STDERR:
 			for(;i < len;i++)
 				_putc(((char *)buf)[i]);
 			return len;
+		case FD_FB:
+			fb_write(buf,file->open_offset,len);
+			break;
 		default:if(fd < 6 || fd >= NR_FILES)
 					return -1;
 				Log("fd = %d",fd);
-				if(file->open_offset >= file->size) return 0;
-				int count = file->open_offset + len;
-				len = count > file->size ? (file->size - file->open_offset) : len;
 				ramdisk_write(buf,file->disk_offset + file->open_offset,len);
 				Log("Finish write,len = %d",len);
-				file->open_offset += len;
-				return len;
+				break;
 	}
+	file->open_offset += len;
+	return len;
+
 }
 
 off_t fs_lseek(int fd , off_t offset, int whence){
 	Log("fd = %d, offset = %d, whence = %d",fd, offset, whence);
 	Finfo *file = &file_table[fd];
+	assert(fd < NR_FILES);
 	switch(whence){
 		case SEEK_SET:file->open_offset = offset;
 					  break;
