@@ -86,6 +86,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 	switch(fd){
 		case FD_STDOUT:
 		case FD_STDERR:
+			Log("123456");
 			for(;i < len;i++)
 				_putc(((char *)buf)[i]);
 			return len;
