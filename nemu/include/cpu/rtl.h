@@ -185,7 +185,7 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
   int zf = 0;
   Log("width = %d",width);
-  //assert(width == 4 || width == 2 || width == 1);
+  assert(width == 4 || width == 2 || width == 1);
   if(width == 1) zf = (*result & 0x000000ff) | 0;
   else if(width == 2) zf = (*result & 0x0000ffff) | 0;
   else if(width == 4) zf = (*result & 0xffffffff) | 0;
@@ -197,7 +197,7 @@ static inline void rtl_update_SF(const rtlreg_t* result, int width) {
   // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
    int sf = 0;
    Log("width = %d",width);
-   //assert(width == 4 || width == 2 || width == 1);
+   assert(width == 4 || width == 2 || width == 1);
    sf = (*result >> (width * 8 - 1)) & 0x1;
    cpu.eflags.SF = sf;
 }
