@@ -9,18 +9,18 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t len) {
-	Log("Before events read");
+	//Log("Before events read");
 	int key;
 	if((key = _read_key()) == _KEY_NONE){
-		Log("uptime");
+		//Log("uptime");
 		snprintf(buf,len,"t %d\n",_uptime());
 	}
 	else if(key > 0x8000){
-		Log("kd--");
+		//Log("kd--");
 		snprintf(buf,len,"kd %s\n",keyname[key - 0x8000]);
 	}
 	else{
-	Log("ku---");
+	//Log("ku---");
 	snprintf(buf,len,"ku %s\n",keyname[key]);
 	}
 	return strlen(buf);
