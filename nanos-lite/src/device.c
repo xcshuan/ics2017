@@ -15,9 +15,9 @@ size_t events_read(void *buf, size_t len) {
 		Log("uptime");
 		snprintf(buf,len,"t %d",_uptime());
 	}
-	else if(key & 0x8000){
+	else if(key > 0x8000){
 		Log("kd--");
-		snprintf(buf,len,"kd %s",keyname[key ^ 0x8000]);
+		snprintf(buf,len,"kd %s",keyname[key - 0x8000]);
 	}
 	else{
 	Log("ku---");
