@@ -4,6 +4,7 @@ extern void ramdisk_read(void *buf, off_t offset, size_t len);
 extern void ramdisk_write(const void *buf, off_t offset, size_t len);
 extern void fb_write(const void *buf, off_t offset, size_t len);
 extern void dispinfo_read(void *buf, off_t offset, size_t len);
+extern size_t events_read(void *buf, size_t len);
 
 typedef struct {
   char *name;
@@ -62,7 +63,9 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 		case FD_DISPINFO:
 			if(len < 0) len = 0;
 			dispinfo_read(buf, file->open_offset,len);
-						 break;
+			break;
+		case FD_EVENTS:
+			return events_read(buf,len);
 
 		default:
 			if(file->open_offset >= file->size) return 0;
