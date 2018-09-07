@@ -53,7 +53,7 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 	Log("fd = %d,size = %d",fd,file_table[fd].size);
 	Finfo *file = &file_table[fd];
 	int count = file->open_offset + len;
-	len = count > (file->size) ? (file->size - file->open_offset) : len;
+	int nread = count > (file->size) ? (file->size - file->open_offset) : len;
 
 	switch(fd){
 		case FD_STDIN:
@@ -61,8 +61,8 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 			return -1;
 
 		case FD_DISPINFO:
-			if(len < 0) len = 0;
-			dispinfo_read(buf, file->open_offset,len);
+			if(nread < 0) nread = 0;
+			dispinfo_read(buf, file->open_offset,nread);
 			break;
 		case FD_EVENTS:
 			return events_read(buf,len);
@@ -70,12 +70,12 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 		default:
 			if(file->open_offset >= file->size) return 0;
 			assert(fd >= 6 && fd <= NR_FILES);
-			ramdisk_read(buf, file->disk_offset + file->open_offset,len);
+			ramdisk_read(buf, file->disk_offset + file->open_offset,nread);
 			break;
 	}
-	file->open_offset += len;
-	Log("Finish read, len = %d", len);
-	return len;
+	file->open_offset += nread;
+	Log("Finish read, len = %d", nread);
+	return nread;
 }
 
 ssize_t fs_write(int fd, const void *buf, size_t len){
