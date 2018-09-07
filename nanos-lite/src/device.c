@@ -13,15 +13,15 @@ size_t events_read(void *buf, size_t len) {
 	int key;
 	if((key = _read_key()) == _KEY_NONE){
 		Log("uptime");
-		snprintf(buf,len,"t %d",_uptime());
+		snprintf(buf,len,"t %d\n",_uptime());
 	}
 	else if(key > 0x8000){
 		Log("kd--");
-		snprintf(buf,len,"kd %s",keyname[key - 0x8000]);
+		snprintf(buf,len,"kd %s\n",keyname[key - 0x8000]);
 	}
 	else{
 	Log("ku---");
-	snprintf(buf,len,"ku %s",keyname[key]);
+	snprintf(buf,len,"ku %s\n",keyname[key]);
 	}
 	return strlen(buf);
 }
