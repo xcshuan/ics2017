@@ -9,7 +9,15 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t len) {
-  return 0;
+	printf("t %d\n",_uptime());
+	int key = _read_key();
+	if(key < 256){
+		printf("kd %s\n",keyname[key]);
+	}
+	else{
+		printf("ku %s\n",keyname[key -0x8000]);
+	}
+	return 0;
 }
 
 static char dispinfo[128] __attribute__((used));
