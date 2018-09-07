@@ -37,11 +37,11 @@ void init_fs() {
 }
 
 int fs_open(const char *pathname, int flags, int mode){
-	Log("pathname:%s",pathname);
+	//Log("pathname:%s",pathname);
 	for(int i = 0; i < NR_FILES; i++){
 		if(strcmp(file_table[i].name,pathname) == 0){
 			file_table[i].open_offset = 0;
-			Log("OK!!");
+			//Log("OK!!");
 			return i;
 		}
 	}
@@ -50,7 +50,7 @@ int fs_open(const char *pathname, int flags, int mode){
 }
 
 ssize_t fs_read(int fd, void *buf, size_t len){
-	Log("fd = %d,size = %d",fd,file_table[fd].size);
+	//Log("fd = %d,size = %d",fd,file_table[fd].size);
 	Finfo *file = &file_table[fd];
 	int count = file->open_offset + len;
 	int nread = count > (file->size) ? (file->size - file->open_offset) : len;
@@ -74,7 +74,7 @@ ssize_t fs_read(int fd, void *buf, size_t len){
 			break;
 	}
 	file->open_offset += nread;
-	Log("Finish read, len = %d", nread);
+	//Log("Finish read, len = %d", nread);
 	return nread;
 }
 
@@ -99,9 +99,9 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 			break;
 		default:if(fd < 6 || fd >= NR_FILES)
 					return -1;
-				Log("fd = %d",fd);
+				//Log("fd = %d",fd);
 				ramdisk_write(buf,file->disk_offset + file->open_offset,nwrite);
-				Log("Finish write,len = %d",nwrite);
+				//Log("Finish write,len = %d",nwrite);
 				break;
 	}
 	file->open_offset += nwrite;
@@ -110,7 +110,7 @@ ssize_t fs_write(int fd, const void *buf, size_t len){
 }
 
 off_t fs_lseek(int fd , off_t offset, int whence){
-	Log("fd = %d, offset = %d, whence = %d",fd, offset, whence);
+	//Log("fd = %d, offset = %d, whence = %d",fd, offset, whence);
 	Finfo *file = &file_table[fd];
 	assert(fd < NR_FILES);
 	switch(whence){
